@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Image Viewer",
+  "version": "1.0.0",
+  "identifier": "com.imageviewer.desktop",
+  "build": {
+    "frontendDist": "../dist",
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run build"
+  },
+  "app": {
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: asset: http://asset.localhost blob:; connect-src 'self' ipc: http://ipc.localhost; script-src 'self'; form-action 'none'",
+      "assetProtocol": {
+        "enable": false
+      }
+    },
+    "windows": [
+      {
+        "label": "main",
+        "create": false,
+        "title": "Image Viewer",
+        "width": 1200,
+        "height": 820,
+        "minWidth": 420,
+        "minHeight": 320,
+        "resizable": true,
+        "center": true,
+        "dragDropEnabled": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": false,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "shortDescription": "A fast image viewer with a dark mode for images",
+    "longDescription": "Opens PNG, JPG, WebP, GIF and BMP images, steps through the folder with the arrow keys, zooms and pans smoothly, and can turn a bright screenshot or document into a dark version.",
+    "category": "Utility",
+    "copyright": "© 2026 Tim Wang",
+    "licenseFile": "../LICENSE",
+    "fileAssociations": [
+      { "ext": ["png"], "name": "PNG Image", "description": "PNG Image", "role": "Viewer", "mimeType": "image/png" },
+      { "ext": ["jpg", "jpeg"], "name": "JPEG Image", "description": "JPEG Image", "role": "Viewer", "mimeType": "image/jpeg" },
+      { "ext": ["webp"], "name": "WebP Image", "description": "WebP Image", "role": "Viewer", "mimeType": "image/webp" },
+      { "ext": ["gif"], "name": "GIF Image", "description": "GIF Image", "role": "Viewer", "mimeType": "image/gif" },
+      { "ext": ["bmp"], "name": "Bitmap Image", "description": "Bitmap Image", "role": "Viewer", "mimeType": "image/bmp" }
+    ],
+    "windows": {
+      "nsis": {
+        "installMode": "currentUser",
+        "installerHooks": "./installer-hooks.nsh",
+        "customLanguageFiles": { "English": "./nsis/English.nsh" },
+        "startMenuFolder": "Image Viewer"
+      }
+    },
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libgtk-3-0"
+        ]
+      }
+    },
+    "publisher": "Tim Wang",
+    "homepage": "https://github.com/TimWJT/image-viewer"
+  }
+}

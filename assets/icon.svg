@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <clipPath id="tile"><rect x="64" y="64" width="896" height="896" rx="200"/></clipPath>
+    <!-- the lower-right triangle: the "dark mode for images" half -->
+    <clipPath id="dark"><path d="M960 64 L960 960 L64 960 Z"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect x="64" y="64" width="896" height="896" fill="#eef3f2"/>
+    <circle cx="340" cy="330" r="92" fill="#0f766e"/>
+    <path d="M64 790 L350 500 L520 670 L670 520 L960 810 L960 960 L64 960 Z" fill="#0f766e"/>
+    <g clip-path="url(#dark)">
+      <rect x="64" y="64" width="896" height="896" fill="#132120"/>
+      <circle cx="340" cy="330" r="92" fill="#5eead4"/>
+      <path d="M64 790 L350 500 L520 670 L670 520 L960 810 L960 960 L64 960 Z" fill="#5eead4"/>
+    </g>
+  </g>
+</svg>

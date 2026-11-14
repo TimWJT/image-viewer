@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en" data-dark-image="off">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Image Viewer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23eef3f2'/%3E%3Cpath d='M100 0V100H0Z' fill='%23132120'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%230f766e'/%3E%3Cpath d='M0 78 30 48 48 66 64 50 100 82V100H0Z' fill='%230f766e'/%3E%3C/svg%3E">
+<script>/*__STARTUP__*/</script>
+<style>/*__CSS__*/</style>
+</head>
+<body>
+
+<header id="bar">
+  <button class="btn labelled" id="btn-open" title="Open an image (Ctrl+O)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    <span>Open image</span>
+  </button>
+
+  <div class="group" id="nav-group">
+    <button class="btn" id="btn-prev" title="Previous image (Left arrow)" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="btn" id="btn-next" title="Next image (Right arrow)" aria-label="Next image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <div id="title"><b id="title-name"></b><span id="title-pos"></span></div>
+
+  <span class="spacer"></span>
+
+  <div class="group" id="zoom-group">
+    <button class="btn" id="btn-zoom-out" title="Zoom out (−)" aria-label="Zoom out">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+    </button>
+    <button class="btn" id="zoomval" title="Show at actual size (1)" aria-label="Zoom level; click for actual size">100%</button>
+    <button class="btn" id="btn-zoom-in" title="Zoom in (+)" aria-label="Zoom in">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="btn" id="btn-fit" title="Fit to window (0)" aria-label="Fit to window" aria-pressed="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>
+    </button>
+  </div>
+
+  <div class="group hide-narrow" id="turn-group">
+    <button class="btn" id="btn-rotate" title="Rotate right (R, Shift+R for left)" aria-label="Rotate right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+    </button>
+    <button class="btn" id="btn-flip" title="Flip left to right (H, V for top to bottom)" aria-label="Flip left to right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M8 7 3 17h5z"/><path d="m16 7 5 10h-5z" fill="currentColor" fill-opacity=".25"/></svg>
+    </button>
+  </div>
+
+  <div class="group" id="dark-group">
+    <button class="btn labelled" id="btn-dark" title="Dark mode for this image (D)" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+      <span>Dark mode</span>
+    </button>
+    <button class="btn" id="btn-dark-options" title="Dark mode options" aria-label="Dark mode options" aria-expanded="false" aria-controls="dark-panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="group">
+    <button class="btn hide-narrow" id="btn-copy" title="Copy image (Ctrl+C)" aria-label="Copy image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+    </button>
+    <button class="btn" id="btn-info" title="Show image details (I)" aria-label="Show image details" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>
+    </button>
+    <button class="btn" id="btn-help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg>
+    </button>
+    <button class="btn" id="btn-full" title="Full screen (F11)" aria-label="Full screen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+    </button>
+  </div>
+</header>
+
+<section id="dark-panel" role="dialog" aria-label="Dark mode options" hidden>
+  <div class="field">
+    <span class="field-label" id="dark-mode-label">Make it dark by</span>
+    <div class="seg" id="dark-mode" role="radiogroup" aria-labelledby="dark-mode-label">
+      <button type="button" data-val="invert" role="radio" aria-checked="true">Smart invert</button>
+      <button type="button" data-val="dim" role="radio" aria-checked="false">Dimming</button>
+    </div>
+    <small id="dark-mode-hint">Flips light and dark, keeps colours. Best for screenshots and documents.</small>
+  </div>
+  <div class="field">
+    <label for="dark-strength" class="field-label">Strength <b id="dark-strength-val">88%</b></label>
+    <input type="range" id="dark-strength" min="0" max="100" step="1" value="88">
+  </div>
+  <button class="btn labelled wide" id="btn-save-dark" title="Save the dark version as a new PNG next to the original (Ctrl+S)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+    <span>Save dark copy as PNG</span>
+  </button>
+  <small id="save-dark-hint">Saved next to the original as name-dark.png. The original is never changed.</small>
+</section>
+
+<div id="shell">
+  <main id="stage" tabindex="0" aria-label="Image">
+    <div id="frame"></div>
+
+    <button class="edge" id="edge-prev" title="Previous image" aria-label="Previous image" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="edge" id="edge-next" title="Next image" aria-label="Next image" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+
+    <div id="empty">
+      <svg class="empty-art" viewBox="0 0 120 90" aria-hidden="true"><rect x="2" y="2" width="116" height="86" rx="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="7 6"/><circle cx="38" cy="32" r="8" fill="currentColor" opacity=".55"/><path d="M14 74l26-24 16 14 14-12 36 22" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <h1>Drop an image here</h1>
+      <p>PNG, JPG, WebP, GIF or BMP. It stays on this computer.</p>
+      <button class="btn labelled primary" id="empty-open">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Open image</span>
+      </button>
+      <p class="hint">Press <kbd>?</kbd> for keyboard shortcuts</p>
+    </div>
+
+    <div id="error" hidden>
+      <h1>Can't show this image</h1>
+      <p id="error-text"></p>
+    </div>
+  </main>
+
+  <aside id="info" aria-label="Image details" hidden>
+    <h2>Details</h2>
+    <dl id="info-list"></dl>
+  </aside>
+</div>
+
+<div id="help" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+  <div class="help-card">
+    <div class="help-head">
+      <h2 id="help-title">Keyboard shortcuts</h2>
+      <button class="btn" id="help-close" aria-label="Close shortcuts" title="Close (Esc)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="help-cols">
+      <dl>
+        <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Previous / next image</dd>
+        <dt><kbd>Home</kbd> <kbd>End</kbd></dt><dd>First / last image in folder</dd>
+        <dt><kbd>Ctrl</kbd> <kbd>O</kbd></dt><dd>Open an image</dd>
+        <dt><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>O</kbd></dt><dd class="desktop-only">Open in a new window</dd>
+        <dt><kbd>Ctrl</kbd> <kbd>C</kbd></dt><dd>Copy image</dd>
+        <dt><kbd>I</kbd></dt><dd>Show or hide details</dd>
+        <dt><kbd>F11</kbd></dt><dd>Full screen</dd>
+        <dt><kbd>Ctrl</kbd> <kbd>W</kbd></dt><dd class="desktop-only">Close window</dd>
+      </dl>
+      <dl>
+        <dt><kbd>+</kbd> <kbd>−</kbd> / wheel</dt><dd>Zoom in / out</dd>
+        <dt><kbd>0</kbd></dt><dd>Fit to window</dd>
+        <dt><kbd>1</kbd></dt><dd>Actual size (100%)</dd>
+        <dt>Double-click</dt><dd>Switch between fit and 100%</dd>
+        <dt>Drag</dt><dd>Move around a zoomed image</dd>
+        <dt><kbd>R</kbd> / <kbd>Shift</kbd> <kbd>R</kbd></dt><dd>Rotate right / left</dd>
+        <dt><kbd>H</kbd> / <kbd>V</kbd></dt><dd>Flip left to right / top to bottom</dd>
+      </dl>
+      <dl>
+        <dt><kbd>D</kbd></dt><dd>Dark mode on or off</dd>
+        <dt><kbd>Shift</kbd> <kbd>D</kbd></dt><dd>Switch smart invert / dimming</dd>
+        <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Dark mode weaker / stronger</dd>
+        <dt><kbd>Ctrl</kbd> <kbd>S</kbd></dt><dd>Save dark copy as PNG</dd>
+        <dt><kbd>?</kbd></dt><dd>This list</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Close panels, leave full screen</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<div id="drop"><div>Drop to open</div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file-input" accept=".png,.jpg,.jpeg,.webp,.gif,.bmp,image/png,image/jpeg,image/webp,image/gif,image/bmp" multiple hidden>
+
+<script>/*__JS__*/</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+[package]
+name = "image-viewer"
+version = "1.0.0"
+description = "A fast image viewer with a dark mode for images"
+authors = ["Tim"]
+edition = "2021"
+rust-version = "1.77.2"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# No "protocol-asset": main.rs serves the `asset` scheme itself, and only for
+# images the user opened and the other images in those folders.
+tauri = { version = "2", features = [] }
+# Already in the tree via tauri; used to decode asset:// request paths.
+percent-encoding = "2"
+# generate_context! embeds the plugins block from tauri.conf.json as JSON, so
+# serde_json has to be a direct dependency of this crate.
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+# The open dialog runs from Rust, so a picked path is granted before the page
+# ever sees it. The page itself gets no dialog or filesystem permission.
+tauri-plugin-dialog = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-window-state = "2"
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
