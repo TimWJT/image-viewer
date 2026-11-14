@@ -23,7 +23,7 @@ const EXTS = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'bmp'];
 
 test('version is the same everywhere', () => {
   const cargoVersion = cargo.match(/^version\s*=\s*"([^"]+)"/m)[1];
-  assert.equal(pkg.version, '1.0.0');
+  assert.equal(pkg.version, '1.0.1');
   assert.equal(conf.version, pkg.version);
   assert.equal(cargoVersion, pkg.version);
 });

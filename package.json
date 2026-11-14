@@ -1,6 +1,6 @@
 {
   "name": "image-viewer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A fast image viewer with a dark mode for images",
   "scripts": {
     "test": "node --test",
@@ -15,7 +15,7 @@
   "keywords": [],
   "type": "module",
   "dependencies": {
-    "@tauri-apps/api": "^2.11.1"
+    "@tauri-apps/api": "~2.11.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.11.4",

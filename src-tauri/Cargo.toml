@@ -1,6 +1,6 @@
 [package]
 name = "image-viewer"
-version = "1.0.0"
+version = "1.0.1"
 description = "A fast image viewer with a dark mode for images"
 authors = ["Tim"]
 edition = "2021"
